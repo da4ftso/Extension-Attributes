@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>USB-C (test)</displayName>
+<description>first attempt at detecting USB 3.1</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+&#13;
+# first attempt at USB-C via USB 3.1 sys_prof EA&#13;
+&#13;
+usb=$(/usr/sbin/system_profiler SPUSBDataType | grep 3.1)&#13;
+&#13;
+if [ -z $usb ];&#13;
+then&#13;
+        echo "&lt;result&gt;False&lt;/result&gt;"&#13;
+else&#13;
+        echo "&lt;result&gt;True&lt;/result&gt;"&#13;
+fi</scriptContentsMac>
+<scriptContentsWindows/>
+</extensionAttribute>
