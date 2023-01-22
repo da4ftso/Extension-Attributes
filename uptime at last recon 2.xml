@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>uptime at last recon</displayName>
+<description>taken from https://www.jamf.com/jamf-nation/discussions/4058/uptime-extension-attribute-script-help-needed#responseChild32006</description>
+<dataType>number</dataType>
+<scriptContentsMac>#! /bin/sh&#13;
+&#13;
+# if $4 from `uptime` is "mins," then the system has been up for less than an hour. &#13;
+# We set $timeup to the output of $3, appending only "m".&#13;
+timechk=`uptime | awk '{ print $4 }'`&#13;
+&#13;
+if [ $timechk = "mins," ]; then&#13;
+        timeup=`uptime | awk '{ print $3 "m" }'`&#13;
+&#13;
+# if $4 is "days," then we generate a readable string from $3, $4, and $5;&#13;
+elif [ $timechk = "days," ]; then&#13;
+&#13;
+                timeup=`uptime | awk '{ print $3 $4 "\ " $5 }' | sed 's/days,/d/g' | sed 's/:/h\ /g' | sed 's/,/m/g'`&#13;
+&#13;
+# otherwise, generate a readable string from $3.&#13;
+else&#13;
+&#13;
+                timeup=`uptime | awk '{ print $3 }' | sed 's/:/h\ /g' | sed 's/,/m/g'`&#13;
+&#13;
+fi&#13;
+&#13;
+echo "&lt;result&gt;$timeup&lt;/result&gt;"</scriptContentsMac>
+<scriptContentsWindows/>
+</extensionAttribute>

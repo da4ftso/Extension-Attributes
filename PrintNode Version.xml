@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>PrintNode Version</displayName>
+<description>since PrintNode continues to not populate CFBundleVersion strings at all, let's use stat to check for date and determine if PrintNode needs an update from 4.10 to 4.17</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+&#13;
+# since PrintNode STILL doesn't include any Version strings we can't rely upon Jamf to get correct version info&#13;
+# so let's use stat -f to check&#13;
+#&#13;
+#&#13;
+# examples from mounted .DMGs of last two releases&#13;
+# &#13;
+# version 4.10.1+2e8    1457311530	Mar  6 18:45:30 2016&#13;
+# version 4.17.4        1510766740	Nov 15 11:25:40 2017&#13;
+&#13;
+app="/Applications/PrintNode.app"&#13;
+&#13;
+date=$(stat -f "%m" $app)&#13;
+&#13;
+if [ ''$date'' == "1457311530" ]; then&#13;
+    version="4.10";&#13;
+elif [ ''$date'' == "1510766740" ]; then&#13;
+    version="4.17";&#13;
+elif [ ''$date'' == "" ]; then&#13;
+    version="Not installed";&#13;
+fi&#13;
+&#13;
+echo "&lt;result&gt;$version&lt;/result&gt;"&#13;
+&#13;
+exit 0</scriptContentsMac>
+<scriptContentsWindows/>
+</extensionAttribute>

@@ -1,0 +1,19 @@
+# jss EAs etc
+
+# printer ppd versions
+# https://www.jamf.com/jamf-nation/discussions/10384/extension-attribute-for-printer-driver-version
+
+#!/bin/sh
+
+# EA to pull printer driver version
+
+# globals
+
+ppdDir='/etc/cups/ppd'
+printerName="YourPrinter"
+
+# grab the driver version
+
+driverVer=`cat $ppdDir/$printerName.ppd | awk '/FileVersion/{ gsub(/"/,""); print $2 }'
+
+echo "<result>$driverVer</result>"

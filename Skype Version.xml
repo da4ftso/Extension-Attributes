@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Skype Version</displayName>
+<description/>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+CFBundleVersion=""&#13;
+if [ -f "/Applications/Skype.app/Contents/Info.plist" ]; then&#13;
+    CFBundleVersion=$(defaults read "/Applications/Skype.app/Contents/Info.plist" CFBundleVersion)&#13;
+fi&#13;
+echo "&lt;result&gt;$CFBundleVersion&lt;/result&gt;"&#13;
+exit 0</scriptContentsMac>
+<scriptContentsWindows/>
+</extensionAttribute>

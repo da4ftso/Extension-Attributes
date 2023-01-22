@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>DisplayLink Connected</displayName>
+<description>parse system_profiler to check for any DisplayLink device(s)</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+&#13;
+# displaylink_EA 0.3 PWC&#13;
+# changing = to != and changing order of results&#13;
+&#13;
+device=$(/usr/sbin/system_profiler SPUSBDataType 2&gt;&amp;1 | grep "Manufacturer: DisplayLink")&#13;
+&#13;
+if [ $device != "" ]; then&#13;
+	echo "&lt;result&gt;Connected&lt;/result&gt;"&#13;
+else&#13;
+	echo "&lt;result&gt;Not Connected&lt;/result&gt;"&#13;
+fi&#13;
+&#13;
+exit 0</scriptContentsMac>
+</extensionAttribute>

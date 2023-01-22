@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Warranty Status</displayName>
+<description>originally from: https://github.com/glarizza/scripts/blob/master/ruby/warranty.rb</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/usr/bin/env ruby&#13;
+#&#13;
+# File:  Warranty.rb&#13;
+#&#13;
+# Decription:     Contact's Apple's selfserve servers to capture warranty&#13;
+#                 information about your product. Accepts arguments of&#13;
+#                 machine serial numbers.&#13;
+#&#13;
+# Author:         Gary Larizza&#13;
+# Last Modified:  8/13/2012&#13;
+# Why:            Apple hates APIs&#13;
+require 'uri'&#13;
+require 'net/http'&#13;
+require 'net/https'&#13;
+require 'date'&#13;
+&#13;
+def get_warranty(serial)&#13;
+  # Setup HTTP connection&#13;
+  uri              = URI.parse('https://selfsolve.apple.com/wcResults.do')&#13;
+  http             = Net::HTTP.new(uri.host, uri.port)&#13;
+  http.use_ssl     = true&#13;
+  http.verify_mode = OpenSSL::SSL::VERIFY_NONE&#13;
+  request          = Net::HTTP::Post.new(uri.request_uri)&#13;
+&#13;
+  # Prepare POST data&#13;
+  request.set_form_data(&#13;
+    {&#13;
+      'sn'       =&gt; serial,&#13;
+      'Continue' =&gt; 'Continue',&#13;
+      'cn'       =&gt; '',&#13;
+      'locale'   =&gt; '',&#13;
+      'caller'   =&gt; '',&#13;
+      'num'      =&gt; '0'&#13;
+    }&#13;
+  )&#13;
+&#13;
+  # POST data and get the response&#13;
+  response      = http.request(request)&#13;
+  response_data = response.body&#13;
+&#13;
+  # I apologize for this line&#13;
+  warranty_status = response_data.split('warrantyPage.warrantycheck.displayHWSupportInfo').last.split('Repairs and Service Coverage: ')[1] =~ /^Active/ ? true : false&#13;
+&#13;
+  # And this one too&#13;
+  expiration_date = response_data.split('Estimated Expiration Date: ')[1].split('&lt;')[0] if warranty_status&#13;
+&#13;
+  puts "\nSerial Number:\t\t#{serial}"&#13;
+  puts "Warranty Status:\t" + (warranty_status ? "Active and it expires on #{expiration_date}" : 'Expired')&#13;
+&#13;
+  #TODO: &#13;
+  #  Grab product description and calculate Purchase Data&#13;
+  #  Catch invalid Serial Numbers&#13;
+  #  Make this more than just a proof of concept...&#13;
+end&#13;
+&#13;
+if ARGV.size &gt; 0 then&#13;
+  serial = ARGV.each do |serial|&#13;
+    get_warranty(serial.upcase)&#13;
+  end&#13;
+else&#13;
+  puts "Without your input, we'll use this machine's serial number."&#13;
+  serial = %x(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}').upcase.chomp&#13;
+  get_warranty(serial)&#13;
+end&#13;
+&#13;
+puts "&lt;result&gt;"+ (warranty_status ? "#{expiration_date}" : 'Expired') +"&lt;/result&gt;"&#13;
+</scriptContentsMac>
+<scriptContentsWindows/>
+</extensionAttribute>

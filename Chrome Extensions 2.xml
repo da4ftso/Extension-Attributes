@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Chrome Extensions</displayName>
+<description/>
+<dataType>string</dataType>
+<scriptContentsMac>#!/usr/bin/python&#13;
+&#13;
+#  Script:     get_chrome_extensions.py&#13;
+#  Author:     Christopher Collins (christophercollins@livenation.com)&#13;
+#  Last Change:    2015-07-14&#13;
+###########################################&#13;
+# Description: This script searches the last logged in user's installed&#13;
+# extension and submits it to Casper during an inventory report.&#13;
+###########################################&#13;
+&#13;
+import os&#13;
+import json&#13;
+from Foundation import CFPreferencesCopyAppValue&#13;
+&#13;
+# Get name of last logged in user so the extension attribute will report&#13;
+# information for the user even if they aren't logged in"&#13;
+lastUser = CFPreferencesCopyAppValue('lastUserName', 'com.apple.loginwindow')&#13;
+chromeSupportPath = '/Users/' + lastUser + \&#13;
+                    '/Library/Application Support/Google/Chrome/'&#13;
+&#13;
+# Initialize a dictionary to hold the variable names extension developers&#13;
+# used if developers localized their extension&#13;
+internationalized_extensions = {}&#13;
+&#13;
+# Initialize a directory to hold the names of the installed extensions&#13;
+installed_extensions = []&#13;
+&#13;
+# walk the chrome application support folder&#13;
+for (dirpath, dirnames, filenames) in os.walk(chromeSupportPath):&#13;
+&#13;
+    # Test to see if file is a manifest.json file and then check its name&#13;
+    # If it is a placeholder name for a localization file (has __MSG).&#13;
+    # If it is a normal name, then add it to the final list. If its not add it&#13;
+    # to the internationalized_extensions dictionary to match&#13;
+    # against a localized messages.json file&#13;
+    for file in filenames:&#13;
+        if ("Extensions" in dirpath and "manifest.json" in file):&#13;
+            manifest = json.load(open(os.path.join(dirpath, file)))&#13;
+            extension_name = manifest.get('name')&#13;
+            name = extension_name&#13;
+            if '__MSG_'not in extension_name:&#13;
+                installed_extensions.append(extension_name)&#13;
+            else:&#13;
+                extension_name = extension_name[6:-2]&#13;
+                if extension_name not in internationalized_extensions:&#13;
+                    internationalized_extensions[extension_name] = extension_name&#13;
+        else:&#13;
+            if (("Extensions" and "locales/en" in dirpath) and "messages.json" in file):&#13;
+                manifest = json.load(open(os.path.join(dirpath, file)))&#13;
+                if manifest:&#13;
+                    for key in internationalized_extensions.keys():&#13;
+                        if manifest.get(key):&#13;
+                            extension_name = manifest.get(key).get('message')&#13;
+                            installed_extensions.append(extension_name)&#13;
+                        else:&#13;
+                            if manifest.get(key.lower()):&#13;
+                                extension_name = manifest.get(key.lower()).get('message')&#13;
+                                installed_extensions.append(extension_name)&#13;
+&#13;
+print "&lt;result&gt;{}&lt;/result&gt;".format(', '.join(sorted(list(set(installed_extensions)))).encode('utf-8'))</scriptContentsMac>
+</extensionAttribute>

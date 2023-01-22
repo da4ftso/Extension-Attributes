@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Active Network Interface</displayName>
+<description>This attribute displays the currently active network interface.  This attribute applies to both Mac and Windows.</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+OS_MINOR=`/usr/bin/sw_vers -productVersion | /usr/bin/cut -d . -f 2`&#13;
+if (( $OS_MINOR &lt; 5 )); then&#13;
+  if [ -f /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Support/networksetup ];then   &#13;
+    echo "&lt;result&gt;`/System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Support/networksetup -listnetworkserviceorder 2&gt;&amp;1 | grep $(/usr/sbin/netstat -rn 2&gt;&amp;1 | /usr/bin/grep -m 1 'default' | /usr/bin/awk '{ print $6 }') | sed -e "s/.*Port: //g" -e "s/,.*//g"`&lt;/result&gt;"&#13;
+  else&#13;
+    echo "&lt;result&gt;The networksetup binary is not present on this machine.&lt;/result&gt;"&#13;
+  fi&#13;
+else&#13;
+  echo "&lt;result&gt;"$(/usr/sbin/networksetup -listnetworkserviceorder 2&gt;&amp;1 | grep $(/usr/sbin/netstat -rn 2&gt;&amp;1 | /usr/bin/grep -m 1 'default' | /usr/bin/awk '{ print $6 }') | sed -e "s/.*Port: //g" -e "s/,.*//g")"&lt;/result&gt;"&#13;
+fi&#13;
+	</scriptContentsMac>
+</extensionAttribute>

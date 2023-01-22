@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Wacom Model</displayName>
+<description>Wacom tablet ID from https://www.jamf.com/jamf-nation/discussions/4073/wacom-extension-attribute&#13;
+&#13;
+May require adding updated models; see https://en.wikipedia.org/wiki/Wacom#Intuos_models</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/bash &#13;
+&#13;
+echo -n "&lt;result&gt;" &#13;
+&#13;
+system_profiler SPUSBDataType | grep -B 3 -i wacom | sed -e 's/^[ \t]*//' | awk 'NR%5==1' |&#13;
+#sed -e 's/USB\ Bus://' |&#13;
+#sed -e 's/USB\ High-Speed\ Bus://' |&#13;
+sed -e 's/XD-0405-U/Intuos2\ A6/g' |&#13;
+sed -e 's/XD-0405-R/Intuos2\ A6/g' |&#13;
+sed -e 's/XD-0608-U/Intuos2\ A5/g' |&#13;
+sed -e 's/XD-0608-R/Intuos2\ A5/g' |&#13;
+sed -e 's/XD-0912-U/Intuos2\ A4/g' |&#13;
+sed -e 's/XD-0912-R/Intuos2\ A4/g' |&#13;
+sed -e 's/XD-1212-U/Intuos2\ A4\ Oversize/g' |&#13;
+sed -e 's/XD-1212-R/Intuos2\ A4\ Oversize/g' |&#13;
+sed -e 's/XD-1218-U/Intuos2\ A3/g' |&#13;
+sed -e 's/XD-1218-R/Intuos2\ A3/g' |&#13;
+sed -e 's/PTZ-430/Intuos3\ A6/g' |&#13;
+sed -e 's/PTZ-431W/Intuos3\ A6\ Wide/g' |&#13;
+sed -e 's/PTZ-630/Intuos3\ A5/g' |&#13;
+sed -e 's/PTZ-631W/Intuos3\ A5\ Wide/g' |&#13;
+sed -e 's/PTZ-930/Intuos3\ A4/g' |&#13;
+sed -e 's/PTZ-1230/Intuos3\ A4\ Oversize/g' |&#13;
+sed -e 's/PTK-440/Intuos4\ S/g' |&#13;
+sed -e 's/PTK-640/Intuos4\ M/g' |&#13;
+sed -e 's/PTK-840/Intuos4\ L/g' |&#13;
+sed -e 's/PTK-1240/Intuos4\ XL/g' |&#13;
+sed -e 's/PTK-450/Intuos5\ touch\ Small/g' &#13;
+sed -e 's/PTH-451/Intuos5\ Pro\ Small/g' |&#13;
+sed -e 's/PTH-650/Intuos5\ touch\ Medium/g' |&#13;
+sed -e 's/PTH-660/Intuos5\ touch\ Medium (2017)/g' |&#13;
+sed -e 's/PTH-651/Intuos5\ Pro\ Medium/g' |&#13;
+sed -e 's/PTH-850/Intuos5\ touch\ Large/g' |&#13;
+sed -e 's/PTH-851/Intuos5\ touch\ Large/g' |&#13;
+sed -e 's/PTH-860/Intuos5\ touch\ Large (2017)/g' |&#13;
+sed -e 's/CTH-460/Bamboo\ Pen&amp;Touch/g' |&#13;
+sed -e 's/CTH-461/Bamboo\ Craft/g' |&#13;
+sed -e 's/CTH-661/Bamboo\ Fun\ Pen&amp;Touch/g' |&#13;
+sed -e 's/CTL-470/Bamboo\ Connect/g' |&#13;
+sed -e 's/CTL-471/Bamboo\ Splash/g' |&#13;
+sed -e 's/CTH-470/Bamboo\ Capture/g' |&#13;
+sed -e 's/CTH-670/Bamboo\ Create/g' |&#13;
+sed -e 's/DTZ-1200W/Cintiq-12WX\ Intuos3/g' |&#13;
+sed -e 's/DTZ-2100/Cintiq-21UX\ Intuos3/g' |&#13;
+sed -e 's/DTK-1200W/Cintiq-12WX\ Intuos4/g' |&#13;
+sed -e 's/DTK-2100/Cintiq-21UX\ Intuos4/g' |&#13;
+sed -e '/^$/d' |&#13;
+sed -e 's/\(.*\)./\1/'&#13;
+&#13;
+echo "&lt;/result&gt;"&#13;
+&#13;
+</scriptContentsMac>
+</extensionAttribute>

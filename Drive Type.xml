@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Drive Type</displayName>
+<description>basic EA to check for SSD or Rotational - original https://www.jamf.com/jamf-nation/discussions/4891/report-for-displaying-storage-type-hd-vs-ssd</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+&#13;
+DriveType=$(system_profiler SPStorageDataType | grep Medium\ Type | sed -e 's/^[Medium\ Type:\ ]*//')&#13;
+&#13;
+echo "&lt;return&gt;$DriveType&lt;/return&gt;"</scriptContentsMac>
+<scriptContentsWindows/>
+</extensionAttribute>

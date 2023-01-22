@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Adobe Remote Update Manager</displayName>
+<description/>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+&#13;
+&#13;
+if [ -f "/usr/local/bin/RemoteUpdateManager" ]; then&#13;
+	result=$(/usr/local/bin/RemoteUpdateManager --help 2&gt;&amp;1 | awk ' NR==1{ print $5 } ')&#13;
+	echo "&lt;result&gt;$result&lt;/result&gt;"&#13;
+else&#13;
+    echo "&lt;result&gt;Not Installed&lt;/result&gt;"&#13;
+fi&#13;
+&#13;
+exit 0&#13;
+</scriptContentsMac>
+</extensionAttribute>

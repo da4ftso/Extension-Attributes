@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Boot Camp</displayName>
+<description>original: https://github.com/rtrouton/rtrouton_scripts/blob/master/rtrouton_scripts/Casper_Extension_Attributes/detect_bootcamp_partition/detect_bootcamp_partition.sh</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+&#13;
+#&#13;
+# Using diskutil list to check for &#13;
+# disk partitions reporting as &#13;
+# "Microsoft Basic Data"&#13;
+#&#13;
+&#13;
+BOOTCAMP_DETECT=$( /usr/sbin/diskutil list disk0 | grep -c "Microsoft Basic Data" )&#13;
+&#13;
+#&#13;
+# If Microsoft Basic Data partition is&#13;
+# reported by diskutil, script reports&#13;
+# "Yes". If no Microsoft Basic Data partition&#13;
+# is reported by diskutil, script reports "No".&#13;
+# &#13;
+&#13;
+if [[ "${BOOTCAMP_DETECT}" == "1" ]]; then&#13;
+      result=Yes&#13;
+   else&#13;
+      result=No&#13;
+fi&#13;
+echo "&lt;result&gt;$result&lt;/result&gt;"&#13;
+&#13;
+exit 0</scriptContentsMac>
+<scriptContentsWindows/>
+</extensionAttribute>

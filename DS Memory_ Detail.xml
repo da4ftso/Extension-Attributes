@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>DS Memory: Detail</displayName>
+<description>RAM details including bank info and status.</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+memDetailXML=`/usr/sbin/system_profiler SPMemoryDataType -xml | /usr/bin/xmllint --noblanks - | /usr/bin/xpath /plist/array/dict/array/dict/array 2&gt;/dev/null`&#13;
+echo "&lt;result&gt;&lt;plist&gt;$memDetailXML&lt;/plist&gt;&lt;/result&gt;"</scriptContentsMac>
+</extensionAttribute>

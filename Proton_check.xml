@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Proton_check</displayName>
+<description>as per http://www.zdnet.com/article/trojan-malware-for-mac-osx-spread-via-compromised-media-player-downloads/</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+&#13;
+# currentUser=`id -un`&#13;
+&#13;
+if [ -f "/tmp/Updater.app/" ] || [ -f "/Library/LaunchAgents/com.Eltima.UpdaterAgent.plist" ] || [ -f "/Library/.rand/" ] || [ -f "/Library/.rand/updateragent.app/" ]; then&#13;
+    echo "&lt;result&gt;Yes&lt;/result&gt;"&#13;
+else&#13;
+    echo "&lt;result&gt;No&lt;/result&gt;"&#13;
+fi</scriptContentsMac>
+</extensionAttribute>

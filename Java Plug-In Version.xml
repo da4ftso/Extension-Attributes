@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Java Plug-In Version</displayName>
+<description>Thanks Rich!</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+ &#13;
+# Christoph von Gabler-Sahm (email-redacted)&#13;
+# Version 1.0&#13;
+&#13;
+# see also: https://derflounder.wordpress.com/2012/10/31/casper-extension-attribute-scripts-to-report-java-browser-plug-in-info/&#13;
+ &#13;
+# checks installed version of Java Applet Plugin&#13;
+# returns values like "Not installed", "JavaInstallOnDemand: 14.5.0", "JavaJDK16: 14.5.0" or "Java 7 Update 09"&#13;
+ &#13;
+PLUGINPATH="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin"&#13;
+ &#13;
+# Plugin version&#13;
+S_VERSION=$( /usr/bin/defaults read "${PLUGINPATH}/Contents/Info" CFBundleShortVersionString 2&gt;/dev/null )&#13;
+ &#13;
+# JavaInstallOnDemand or empty&#13;
+S_PROJECT=$( /usr/bin/defaults read "${PLUGINPATH}/Contents/version" ProjectName 2&gt;/dev/null )&#13;
+ &#13;
+if [[ -e "${PLUGINPATH}" ]]; then&#13;
+    if [[ "${S_PROJECT}" == "" ]]; then&#13;
+        EA_RESULT="${S_VERSION}"&#13;
+    else&#13;
+        EA_RESULT="${S_PROJECT}: ${S_VERSION}"&#13;
+    fi&#13;
+else&#13;
+    EA_RESULT="Not installed"&#13;
+fi&#13;
+ &#13;
+echo "&lt;result&gt;${EA_RESULT}&lt;/result&gt;"</scriptContentsMac>
+<scriptContentsWindows/>
+</extensionAttribute>

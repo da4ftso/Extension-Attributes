@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Silicon Labs VCP Driver Version</displayName>
+<description>defaults read /System/Library/Extensions/SiLabsUSBDriver.kext CFBundleGetInfoString</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+&#13;
+version=$(/usr/bin/defaults read /Library/Extensions/SiLabsUSBDriver.kext/Contents/Info.plist CFBundleVersion)&#13;
+&#13;
+echo "&lt;result&gt;$version&lt;/result&gt;"</scriptContentsMac>
+<scriptContentsWindows/>
+</extensionAttribute>
