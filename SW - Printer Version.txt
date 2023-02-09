@@ -7,6 +7,10 @@
 # one EA to get a specific printer queue's driver version could then be basis of a smart group
 # (if printer name = X and version != Y)
 
+# why wouldn't we use this?
+# could return bad data if different versions of the OS had different default PPDs
+# likely better to use package receipts instead
+
 # globals
 
 ppdDir=$(/etc/cups/ppd)
