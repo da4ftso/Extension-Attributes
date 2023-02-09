@@ -6,9 +6,11 @@
 # audit – tampering operations are logged, but not blocked.
 # block – tamper protection is on, tampering operations are blocked.
 
-if [ -f "/Applications/Microsoft Defender.app/Contents/Resources/Tools/wdavdaemonclient" ]; then
+wdav="/Applications/Microsoft Defender.app/Contents/Resources/Tools/wdavdaemonclient"
 
-    result=$("/Applications/Microsoft Defender.app/Contents/Resources/Tools/wdavdaemonclient" health --field tamper_protection | sed 's/"//g')
+if [ -f "$wdav" ]; then
+
+    result=$("$wdav" health --field tamper_protection | sed 's/"//g')
 
     echo "<result>$result</result>"
 
