@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# EA to pull driver version of the last used printer
+# https://www.jamf.com/jamf-nation/discussions/10384/extension-attribute-for-printer-driver-version
+
+# why would we use this?
+# one EA to get a specific printer queue's driver version could then be basis of a smart group
+# (if printer name = X and version != Y)
+
+# globals
+
+ppdDir=$(/etc/cups/ppd)
+
+printer="YourPrinter" # needs to be the CUPS queue name, not whats shown in Sys Prefs/Settings
+
+# just for fun, let's parse the most recently-used queue name
+# printer=$(lpstat -W all | awk 'END { print $1 } ' | cut -d - -f 1) 
+
+
+# grab the driver version
+
+driverVer=$(cat $ppdDir/$printer.ppd | awk '/FileVersion/{ gsub(/"/,""); print $2 })
+
+echo "<result>$driverVer</result>"
