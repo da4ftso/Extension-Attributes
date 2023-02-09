@@ -1,9 +1,11 @@
 #!/bin/sh
 ​
+# change GROUPNAME and DOMAIN
+
 computer=$(networksetup -getcomputername | awk '{print tolower($0)}')
-group=APP_JAMF_Deployment_Test
+group=GROUPNAME
 ​
-dscl /Active\ Directory/CORPORATE/example.com -read /Groups/"$group" | grep "$computer"
+dscl /Active\ Directory/DOMAIN/example.com -read /Groups/"$group" | grep "$computer"
 ​
 if [ $? -eq 0 ];
 then
