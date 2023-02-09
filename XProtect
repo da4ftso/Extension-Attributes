@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# EA to determine the last xprotect update
+# EA to determine the last xprotect update up through macOS Monterey
+# this version will not work on Ventura - move to old EA repo
 
 # https://github.com/franton/Extension-Attributes/blob/master/xprotectupdate.sh
 
