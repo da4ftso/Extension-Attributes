@@ -1,6 +1,8 @@
 #!/bin/bash
 
-taniumLaunchDaemon=$(ls /Library/LaunchDaemons/ | grep com.tanium.taniumclient.plist) # this really should be a grep or something
+# TO-DO: let's combine this to check for not installed, not running, or running
+
+taniumLaunchDaemon=$(ls /Library/LaunchDaemons/com.tanium.taniumclient.plist)
 
 if [[ $taniumLaunchDaemon != '' ]]; then
 
