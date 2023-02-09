@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ####################################################################################################
 #
@@ -59,6 +59,10 @@
 #
 # HISTORY
 #
+# Version: 1.1
+#
+# - Pete C. changed backticks to $(), removed support for older macOS (assume /usr/sbin/networksetup
+#
 # Version: 1.0.1
 #
 # - Created by Justin Sako on February 11, 2015
@@ -73,8 +77,8 @@
 
 function parameterMatchesRegexPattern ()
 {
-  local parameter=$1
-  local pattern=$2
+  local parameter="$1"
+  local pattern="$2"
 
   if [[ "$parameter" =~ $pattern ]]; then
     return 0
@@ -85,34 +89,20 @@ function parameterMatchesRegexPattern ()
 
 function getCurrentWifiNetwork ()
 {
-  local osMinorVersion=`/usr/bin/sw_vers -productVersion | /usr/bin/cut -d . -f 2`
-
-  # Use the appropriate path for the networksetup command on the target OS version
-
-  if (( $osMinorVersion < 5 )); then
-    local networksetupPath="/System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Support/networksetup"
-  else
-    local networksetupPath="/usr/sbin/networksetup"
-  fi
+  networksetupPath="/usr/sbin/networksetup"
 
   # Determine the current Wifi network
 
   if [ ! -f $networksetupPath ]; then
     local result="The networksetup binary is not present on this machine."
   else
-    if (( $osMinorVersion < 6 )); then
-      local result=`$networksetupPath -getairportnetwork | sed 's/Current AirPort Network: //g'`
-    elif (( $osMinorVersion < 7 )); then
-      local result=`$networksetupPath -getairportnetwork AirPort | sed 's/Current AirPort Network: //g'`
-    else
-      local device=`$networksetupPath -listallhardwareports | grep -A 1 Wi-Fi | awk '/Device/{ print $2 }'`
-      local result=`$networksetupPath -getairportnetwork $device | sed 's/Current Wi-Fi Network: //g'`
-    fi
+    local device=$($networksetupPath -listallhardwareports | grep -A 1 Wi-Fi | awk '/Device/{ print $2 }')
+    local result=$($networksetupPath -getairportnetwork "$device" | sed 's/Current Wi-Fi Network: //g')
   fi
 
   # Modify result to report shorter answers
 
-  if [[ `echo "$result" | grep "Error"` != "" ]]; then
+  if [[ $(echo "$result" | grep "Error") != "" ]]; then
     result="No Wi-Fi Device Found"
   elif parameterMatchesRegexPattern "$result" "(.*)Wi-Fi[[:space:]]power[[:space:]]is[[:space:]]currently[[:space:]]off(.*)"; then
     result="Wi-Fi Off"
@@ -120,7 +110,7 @@ function getCurrentWifiNetwork ()
     result="Not Associated"
   fi
 
-  echo $result
+  echo "$result"
 }
 
 
@@ -131,5 +121,3 @@ function getCurrentWifiNetwork ()
 activeInterface=$(getCurrentWifiNetwork)
 
 echo "<result>$activeInterface</result>"
-
-
