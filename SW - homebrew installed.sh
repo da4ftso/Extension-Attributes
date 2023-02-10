@@ -1,10 +1,9 @@
 #!/bin/bash
 
 # check for existence of homebrew
-# old version, Intel (x86) only
 
-if [ -f "/usr/local/bin/brew" ]; then
-    echo "<result>Installed</result>"
+if [[ -f "/usr/local/bin/brew" || -f "/opt/homebrew/bin/brew" ]]; then
+    echo "<result>Installed: $(brew config | awk '/HOMEBREW_VERSION:/ { print $NF } ')</result>"
 else
     echo "<result>Not Installed</result>"
-fi    
+fi
