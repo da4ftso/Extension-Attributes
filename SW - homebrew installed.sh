@@ -3,12 +3,12 @@
 # check for existence of homebrew
 
 if [ -f "/usr/local/bin/brew" ] ; then
-
-    echo "<result>Installed: $(/usr/local/bin/brew config | awk '/HOMEBREW_VERSION:/ { print $NF } ')</result>"
+	result=$(/usr/local/bin/brew config | awk '/HOMEBREW_VERSION:/ { print $NF } ')
+    echo "<result>Installed: "$result"</result>"
 
 elif [ -f "/opt/homebrew/bin/brew" ] ; then
-
-    echo "<result>Installed: $(/opt/homebrew/bin/brew config | awk '/HOMEBREW_VERSION:/ { print $NF } ')</result>"
+	result=$(/opt/homebrew/bin/brew config | awk '/HOMEBREW_VERSION:/ { print $NF } ')
+    echo "<result>Installed: "$result"</result>"
     
 else
     echo "<result>Not Installed</result>"
