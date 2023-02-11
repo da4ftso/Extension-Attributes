@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# https://github.com/rtrouton/rtrouton_scripts/blob/main/rtrouton_scripts/Casper_Extension_Attributes/java_jdk_vendor/java_jdk_vendor.sh
+#
 # This extension attribute verifies if a Java JDK is installed. 
 # Once the presence of an installed JDK has been 
 # verified by checking java_home, the JDK is checked
