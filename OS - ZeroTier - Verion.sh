@@ -2,6 +2,8 @@
 
 # query zerotier-cli, return version
 
+# TO-DO: check if ZeroTier is running, return that status?
+
 # check for binary, bail out
 
 if [[ -e /usr/local/bin/zerotier-cli ]]; then
