@@ -7,8 +7,23 @@ app="$4" # add the usual to deal with ".app" or not
 # did $4 contain a path?
 # if $app != "/Applications/"*
 # did $4 contain a path that wasn't /Applications/ ?
+#  - mdfind, bail out if no match with .app ?
 #
 # or use =~ ?
+
+# if [[ ${app} == "" ]]; then
+#	echo "No input provided, exiting..."
+#	exit 1
+
+app=""
+
+if [[ "$app" =~ ".app" ]]; then
+	echo "contains .app"
+else
+	app="$app".app
+fi
+
+# TO-DO: sort /Applications
 
 plist="{$app}/Contents/Info.plist"
 
