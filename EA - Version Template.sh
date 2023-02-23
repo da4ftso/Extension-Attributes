@@ -3,7 +3,9 @@
 app="$4" # add the usual to deal with ".app" or not
 
 # did $4 contain .app?
+# if $app != *.app
 # did $4 contain a path?
+# if $app != "/Applications/"*
 # did $4 contain a path that wasn't /Applications/ ?
 
 plist="{$app}/Contents/Info.plist"
