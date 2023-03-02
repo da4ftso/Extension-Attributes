@@ -23,7 +23,11 @@ else
 	app="$app".app
 fi
 
-# TO-DO: sort /Applications
+# TO-DO: 
+# - sort /Applications
+# - check if CFBundleVersion is empty, try to read CFShortBundleVersion instead
+# - validate this against App.app, App 2.app, etc etc
+# - find that other EA that had this done much more gracefully
 
 plist="{$app}/Contents/Info.plist"
 
