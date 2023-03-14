@@ -1,17 +1,18 @@
 #!/bin/bash
 
-app="$4" # add the usual to deal with ".app" or not
+# app="$4" # add the usual to deal with ".app" or not
 
 # assume $4 is in format of /path/name.app
 # ie /Applications/Google Chrome.app
 # see the Fancy version for intelligent handling of param $4
 
-if [[ ${app} == "" ]]; then
-  echo "No input provided, exiting..."
-exit 1
+# if [[ ${app} == "" ]]; then
+#   echo "No input provided, exiting..."
+# exit 1
 
 # - find that other EA that had this done much more gracefully
 
+app="/path/to/App"
 plist="{$app}/Contents/Info.plist"
 
 if [[ ! -e $plist ]]; then
