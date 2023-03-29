@@ -1,15 +1,16 @@
 #!/bin/bash
 
-# Extension Attribute to report the installed version of the Nexthink agent, or Not Installed.
+# Description: Extension Attribute to report the installed version of the Nexthink agent, or Not Installed.
 
-if [ -f "/Library/Application Support/Nexthink/config.json" ]; then
+config="/Library/Application Support/Nexthink/config.json"
 
-	version=$( /bin/cat "/Library/Application Support/Nexthink/config.json" | awk '/version/ { print $NF }' | tr -d '",' )
+if [ -f "$config" ]; then
+
+	VERSION=$( /bin/cat "$config" | awk -F\" '/version/ { print toupper($4)}' )
 
 else
 
-	version="Not Installed"
-
+	VERSION="Not Installed"
 fi
 
-echo "<result>$version</result>"
+echo "<result>$VERSION</result>"
