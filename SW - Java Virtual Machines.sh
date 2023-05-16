@@ -16,4 +16,4 @@
 
 result=$(/usr/libexec/java_home --verbose 2>&1 | awk ' { print $3 " " $1 " " $2  } ' | sed '1d;$d' | tr -d '()"')
 
-echo "<result>$result</result>"
+printf "<result>$result</result>"
