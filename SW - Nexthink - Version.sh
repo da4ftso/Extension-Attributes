@@ -6,7 +6,7 @@ config="/Library/Application Support/Nexthink/config.json"
 
 if [ -f "$config" ]; then
 
-	VERSION=$( /bin/cat "$config" | awk -F\" '/version/ { print toupper($4)}' )
+	VERSION=$(/usr/bin/awk -F\" '/version/ { print toupper ( $4 ) }'  "$config" )
 
 else
 
