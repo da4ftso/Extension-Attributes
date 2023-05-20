@@ -1,7 +1,10 @@
 #!/bin/bash
 
 # app="$4" # add the usual to deal with ".app" or not
-
+#
+# TO-DO:
+#  build a version that compares CFBundleVersion with ShortBundle and reports the longer of the two
+#  
 # assume $4 is in format of /path/name.app
 # ie /Applications/Google Chrome.app
 # see the Fancy version for intelligent handling of param $4
@@ -22,7 +25,9 @@ if [[ ! -e $plist ]]; then
 	exit 0 # do we need to exit here? why do I think this?
     
 else
-	version=$(/usr/bin/defaults read "$plist" | awk '/CFBundleVersion/ { print $NF } ' | tr -d '";')
+	version=$(/usr/bin/defaults read "$plist" CFBundleVersion)
+
+#	version=$(/usr/bin/defaults read "$plist" | awk '/CFBundleVersion/ { print $NF } ' | tr -d '";')
 
 	echo "<result>${version}</result>"
 
