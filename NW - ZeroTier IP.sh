@@ -8,10 +8,9 @@ if [[ -e /usr/local/bin/zerotier-cli ]]; then
 
 	IP=$(/usr/local/bin/zerotier-cli listnetworks | awk '{if (NR!=1) {print substr($NF, 1, length($NF)-3)}} ')
     
-    echo "<result>$IP</result>"
-    
+	echo "<result>$IP</result>"
 else
 
 	echo "<result>CLI not found</result>"
-    
+
 fi
