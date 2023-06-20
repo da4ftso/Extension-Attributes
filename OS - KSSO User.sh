@@ -10,4 +10,4 @@ domain=$(/usr/bin/app-sso -l -j | awk '/"/ { print $NF } ' | tr -d '",')
 
 user=$(/usr/bin/app-sso -i $domain -j | awk '/user_name/ { print $NF } ' | tr -d '",')
 
-echo "<result>$user</result>"
+echo "<result>${user}</result>"
