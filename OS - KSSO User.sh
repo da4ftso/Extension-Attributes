@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# let's query app-sso to get some fun and useful info
+# reports status from devices logged in to AD via Kerberos SSO extension
 
 # domain
 
