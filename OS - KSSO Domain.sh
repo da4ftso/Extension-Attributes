@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# /usr/bin/app-sso is present in macOS Monterey and above
+# /usr/bin/app-sso is present in macOS Monterey and above (as far back as Catalina or Big Sur?)
 
 # reports status from devices logged in to AD via Kerberos SSO extension
 
