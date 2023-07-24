@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# read the XProtect Version ("XpremVer")
+
+result="Unknown"
+
+result=$( /usr/bin/defaults read /Library/Apple/System/Library/CoreServices/XProtect.app/Contents/Info.plist CFBundleShortVersionString )
+
+echo "<result>${result}</result>"
+
+exit 0
