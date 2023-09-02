@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# read the XProtect Version ("XpremVer")
+# read the XProtect Remediator Version ("XpremVer")
 
 result="Unknown"
 
