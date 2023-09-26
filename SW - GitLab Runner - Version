@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# gitlab-runner-version
+# check for versions affected by CVE-2023-5009
+
+if [[ -e /usr/local/bin/gitlab-runner ]]; then
+
+	result=$(/usr/local/bin/gitlab-runner --version | awk '/Version: / { print $NF }')
+    
+else
+
+	result="Not Installed"
+    
+fi
+
+echo "<result>$result</result>"
+
+exit 0
