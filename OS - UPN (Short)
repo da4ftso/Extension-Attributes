@@ -1,0 +1,7 @@
+#!/bin/bash
+
+upn=$(/usr/bin/klist | awk '/Principal: / { print $NF } ')
+
+upn="${upn%%@*}"
+
+echo "<result>$upn</result>"
