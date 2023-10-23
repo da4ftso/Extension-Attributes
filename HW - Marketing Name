@@ -14,7 +14,7 @@ plistsp="/Users/$crntusr/Library/Preferences/com.apple.SystemProfiler.plist"
 # if com.apple.SystemProfiler.plist does not exist create it
 # if cpu is Intel collect Marketing Model string from com.apple.SystemProfiler.plist
 
-if [ "$(/usr/bin/uname -m)" = 'arm64' ]; thenthen
+if [ "$(/usr/bin/uname -m)" = 'arm64' ]; then
 	/usr/sbin/ioreg -ar -k product-name > /tmp/ioreg.plist
 	mrktmdl="$(/usr/libexec/PlistBuddy -c 'print 0:product-name' /tmp/ioreg.plist)"
 	rm /tmp/ioreg.plist
