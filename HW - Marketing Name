@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# based upon https://community.jamf.com/t5/jamf-pro/collect-year-from-mac-marketing-model-name/m-p/250495/highlight/true#M233520
+# redirect from stdin was causing errors, but this used to work? write out to .plist instead
+# tested via ARD on 12.x - 14.0 arm64 & x86
+
+# variables
+
+crntusr="$(/usr/bin/stat -f %Su /dev/console)"
+plistsp="/Users/$crntusr/Library/Preferences/com.apple.SystemProfiler.plist"
+
+
+# if cpu is Apple Silicon collect Marketing Model string from ioreg
+# if com.apple.SystemProfiler.plist does not exist create it
+# if cpu is Intel collect Marketing Model string from com.apple.SystemProfiler.plist
+
+if [ "$(/usr/bin/uname -m)" = 'arm64' ]; thenthen
+	/usr/sbin/ioreg -ar -k product-name > /tmp/ioreg.plist
+	mrktmdl="$(/usr/libexec/PlistBuddy -c 'print 0:product-name' /tmp/ioreg.plist)"
+	rm /tmp/ioreg.plist
+else
+  if ! [ -e "$plistsp" ]
+    then
+        /usr/bin/sudo -u "$crntusr" /usr/bin/open '/System/Library/CoreServices/Applications/About This Mac.app'; /bin/sleep 1
+        /usr/bin/pkill -ail 'System Information'; /bin/sleep 1
+        /usr/bin/killall cfprefsd; /bin/sleep 1
+    fi
+    mrktmdl="$(/usr/libexec/PlistBuddy -c "print 'CPU Names'" "$plistsp" 2> /dev/null | awk '/= / { for (i=3;i<=NF;i++) printf("%s ",$i)} {print ""} ' | tr -d '\n')"
+fi
+
+
+# if that didn't work collect the Model Identifier, exit
+
+if [ -z "$mrktmdl" ]
+then
+	mrktmdl="$(/usr/sbin/sysctl -n hw.model)"
+fi
+
+echo "<result>$mrktmdl</result>"
+
+exit
