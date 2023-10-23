@@ -25,7 +25,7 @@ else
         /usr/bin/pkill -ail 'System Information'; /bin/sleep 1
         /usr/bin/killall cfprefsd; /bin/sleep 1
     fi
-    mrktmdl="$(/usr/libexec/PlistBuddy -c "print 'CPU Names'" "$plistsp" 2> /dev/null | awk '/= / { for (i=3;i<=NF;i++) printf("%s ",$i)} {print ""} ' | tr -d '\n')"
+    mrktmdl="$(/usr/libexec/PlistBuddy -c "print 'CPU Names'" "$plistsp" 2> /dev/null | awk '/= / {print substr($0, index($0, $3))}' | tr -d '\n')"
 fi
 
 
