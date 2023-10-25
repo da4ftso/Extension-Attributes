@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# obviously this should've been named 'Will It Blend' but reasons
+
+# from userspace: /bin/launchctl list | /usr/bin/awk '{print substr($0, index($0, $3))}' | /usr/bin/sed '1d' | grep -v apple
+#
+# use this to determine everything required for day to day
+# then use this EA to check whether it's loaded
+#
+# WIP: separate version of this that attempts to reload (force) the job
+
+# variables
+
+currentUser=$(stat -f%Su /dev/console)
+uid=$(id -u $currentUser)
+plistPath="$4"
+
+if [[ -z "$4" ]]; then
+  plistPath="/path/to/your.plist" # hardcode here
+fi 
+
+if /bin/launchctl list | grep -q "$plistPath" ; then # https://www.shellcheck.net/wiki/SC2143
+	echo "$plistPath job is loaded."
+else
+	echo "$plistPath job is not loaded load."
+fi
