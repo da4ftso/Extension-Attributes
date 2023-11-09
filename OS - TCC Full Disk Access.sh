@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# 1.1 added grep to filter out stock components and strip /Library/App Support (ie Nexthink)
+#
 # query the TCC.db to return all SystemPolicyAllFiles entitlements
 #
 # sample return:
