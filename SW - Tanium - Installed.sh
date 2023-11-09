@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# TO-DO: let's combine this to check for not installed, not running, or running
+# for a solution that reports version or Not Installed:
+# https://github.com/da4ftso/Extension-Attributes/blob/master/SW%20-%20Tanium%20-%20Version.sh
 
 taniumLaunchDaemon=$(ls /Library/LaunchDaemons/com.tanium.taniumclient.plist)
 
