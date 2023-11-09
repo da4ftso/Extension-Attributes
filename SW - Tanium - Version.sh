@@ -1,16 +1,16 @@
 #!/bin/bash
 
-# as an EA, no need to sudo this, or have a root check
+# requires sudo when run interactively
 
-taniumVersion=$(/Library/Tanium/TaniumClient/TaniumClient --version)
+taniumAgent="/Library/Tanium/TaniumClient/TaniumClient"
 
-if [[ $taniumVersion != '' ]]; then
-
-	echo "<result>$taniumVersion</result>"
+if [[ -e "${taniumAgent}" ]]; then
+        version=$($taniumAgent --version)
+        echo "<result>$version</result>"
 
 else
 
-	echo "<result>Not Installed</result>"
+        echo "<result>Not Installed</result>"
 
 fi
 
