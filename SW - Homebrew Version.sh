@@ -27,7 +27,7 @@ brewPath="$brewPrefix/brew"
 # Check for presence of target binary and get version.
 
 if [ -e "$brewPath" ]; then
-  result=$(sudo -u "$loggedInUser" "$brewPath" --version | awk ' { print $2 }' )
+  result=$(sudo -u "$loggedInUser" "$brewPath" --version | awk ' { print $2 }' | sed 's/[ -].*//' ) # catch the -dirty and (git etc
 
 else
   result="" # change here if you'd prefer a label ie 'Not Installed'
