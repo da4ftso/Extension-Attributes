@@ -3,11 +3,13 @@
 # with no awk, we'd get some crud:
 #  Homebrew 4.1.15 Homebrew/homebrew-core (no Git repository) Homebrew/homebrew-cask (git revision 9d67b1d07b; last commit 2023-10-10)
 #
-# with awk $NF we'd get a partial:
-#  repository)
-#
 # with awk $2 we (typically) get a usable value:
-#   >=2.5.0 4.1.15 4.1.21
+#   >=2.5.0
+#   3.2.14 (git (git
+#   4.0.18 2023-01-18) 2023-05-19)
+#   4.1.21
+#
+# sed to remove the crud.
 
 
 loggedInUser=$(/usr/bin/stat -f%Su "/dev/console")
