@@ -10,9 +10,9 @@ if [[ -f "${plist}" ]]
 then
 	if [ "$sw_vers" -gt "11" ]
 	then
-	        status=$(plutil -p "${domain}" | awk '/LocationServicesEnabled/ {print $NF}')
+	        status=$(plutil -p "${plist}" | awk '/LocationServicesEnabled/ {print $NF}')
 	else
-                status=$(defaults read "${domain}" LocationServicesEnabled)
+                status=$(defaults read "${plist}" LocationServicesEnabled)
         fi
     if [[ "${status}" == "1" ]]
     then
