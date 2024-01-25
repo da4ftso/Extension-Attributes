@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Prettyprint all Java VMs
+# Prettyprint all Java JDKs (VMs)
 #
 # /usr/libexec/java_home --verbose will return something like:
 #
@@ -12,7 +12,9 @@
 #    1.8.0_341 (x86_64) "Oracle Corporation" - "Java SE 8" /Library/Java/JavaVirtualMachines/jdk1.8.0_341.jdk/Contents/Home
 # /Library/Java/JavaVirtualMachines/amazon-corretto-11.jdk/Contents/Home
 #
-# awk all the things
+# awk/sed/tr etc all the things for results like so:
+#    Azul 17.0.7 x86_64
+#    Oracle 1.8.391.13 arm64
 
 result=$(/usr/libexec/java_home --verbose 2>&1 | awk ' { print $3 " " $1 " " $2  } ' | sed '1d;$d' | tr -d '()"')
 
