@@ -11,9 +11,10 @@
 #
 # sed to remove the crud.
 
-
+# runAsUser since otherwise Jamf will report this via the root user and give an inaccurate result
 loggedInUser=$(/usr/bin/stat -f%Su "/dev/console")
 
+# -m for (machine) hardware type; could use -p instead
 architectureCheck=$(/usr/bin/uname -m)
 
 if [ "$architectureCheck" = "arm64" ]; then
