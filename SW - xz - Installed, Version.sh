@@ -1,5 +1,7 @@
 #/bin/bash
 
+# https://access.redhat.com/security/cve/CVE-2024-3094
+
 architectureCheck=$(/usr/bin/uname -m)
 
 if [ "$architectureCheck" = "arm64" ]; then
