@@ -12,8 +12,10 @@ architectureCheck=$(/usr/bin/uname -m)
 
 if [[ "$architectureCheck" = "arm64" ]]; then
   brewPrefix="/opt/homebrew/bin"
+
 else
   brewPrefix="/usr/local/bin"
+
 fi
 
 brewPath="$brewPrefix/brew"
@@ -22,8 +24,10 @@ if [[ -e "$brewPath" ]]; then
   result=$(sudo -u "$loggedInUser" "$brewPath" list | grep xz)
 
   if [[ "$result" != "" ]]; then 
-		version=$(sudo -u "$loggedInUser" "$brewPath" info xz | awk 'NR==1 { print $4 }')
-  		echo "<result>Installed: $version</result>"
+		version=$(sudo -u "$loggedInUser" $brewPath info xz | awk 'NR==1 { print $4 }')
+		string="<result>Installed: $version</result>"
+		string=$(echo "$string" | tr -d "\n" | tr -d "\r")
+  		echo "$string"
         else
                 echo "<result>Not Installed</result>"
   fi
