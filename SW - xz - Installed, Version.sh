@@ -4,6 +4,8 @@
 # otherwise returns "Not Installed"
 #
 # https://access.redhat.com/security/cve/CVE-2024-3094
+#
+# replace multiple tr with shell expansion?
 
 # runAsUser since otherwise Jamf will report this via the root user and give an inaccurate result
 loggedInUser=$(/usr/bin/stat -f%Su "/dev/console")
