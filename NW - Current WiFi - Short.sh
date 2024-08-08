@@ -1,15 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
+# 1.3 240808 new version that supports 14+
+# 1.2 230924 changed to NF and rm'd xargs
 # 1.1 230830
-# returns "Off" if Wi-Fi is off
-# deprecated as of 14 (?)
 
-SSID=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | /usr/bin/awk '/SSID: / { $1 = "" ; print $0 }') | tr -d '/n' | xargs
+SSID=$(wdutil info | awk -F: '/SSID/ { print $NF;exit } ')
+SSID=${SSID:1}
 
 if [[ -z $SSID ]]; then
-	echo "<result>Not Connected</result>"
+        echo "<result>Not Connected</result>"
 else
-	echo "<result>${SSID}</result>"
+        echo "<result>${SSID}</result>"
 fi
 
 exit 0
