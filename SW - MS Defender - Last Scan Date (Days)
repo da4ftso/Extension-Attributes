@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# EA to report Defender's last scan date in days
+# by not reporting a date, we can use Jamf's Greater Than operator
+
+# string output: "Jan 05 2023 at 03:18:39 PM"
+# gnarly sed etc to sanitize output
+last_scan_date_str=$(/usr/local/bin/mdatp scan list | awk -F "Scan Start Time:" ' { print $2; exit }' | tr -d "at,:" | sed 's/^[[:space:]]*//' | sed 's/...$//')
+
+# convert to epoch time: "1525351519"
+last_scan_date=$(date -j -f "%b %d %Y %H %M %S" "$last_scan_date_str" "+%s")
+
+currentDate=$(date +%s)
+
+# expr is antiquated, so we can simply ((...))
+difference=$((currentDate - last_scan_date))
+
+days=$((difference / 86400))
+
+# report results in days
+echo "<result>$days</result>"
