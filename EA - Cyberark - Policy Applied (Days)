@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# sorry if this is sloppy at first cause cold meds and lack of enthusiasm
+
+# Cyberark EPN writes out to: /Library/Preferences/com.cyberark.CyberArkEPM.plist
+
+cyberarkDate=$(plutil -p /Library/Preferences/com.cyberark.CyberArkEPM.plist | awk '/PolicyUpdateDate/ { print $3; exit }')
+
+# convert to epoch
+
+cyberarkEpoch=$(date -jf "%Y-%m-%d" "$cyberarkDate" +"%s")
+
+# I slept how long
+
+currentDate=$(date +%s)
+
+# maths!
+
+difference=$((currentDate - cyberarkEpoch))
+
+days=$((difference / 86400))
+
+# result
+
+echo "<result>"$days"</result>"
