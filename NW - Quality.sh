@@ -20,7 +20,7 @@ case "${osProductVersion}" in
         echo "<result>${downloadCapacity} | ${downloadResponsiveness}</result>"
         ;;
 
-    13* )
+    13* 14* 15* )
         networkQualityTest=$( /usr/bin/networkQuality -s -v )
         downlinkCapacity=$( echo "${networkQualityTest}" | /usr/bin/awk '/Downlink capacity:/{print $3, $4}' )
         downlinkResponsiveness=$( echo "${networkQualityTest}" | /usr/bin/awk '/Downlink Responsiveness:/{print $3, $4, $5}' )
