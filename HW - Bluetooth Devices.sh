@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-# both versions here
+# both versions included here, pick one.
 
 # I am so sorry for this. please don't hurt me.
 # old method, slow, heinous
@@ -17,8 +17,7 @@ btdevices=$(/usr/bin/wdutil info | \
 btdevices=$(/usr/bin/wdutil info | \
   awk '$0 ~ /Connected[[:space:]]*:[[:space:]]*Yes/ { print dev }
        $0 ~ /Address/ { dev = prev }
-       { prev = $0 }' | \
-  sed 's/‚Äô/'\''/g')
+       { prev = $0 }' | sed -e 's/‚Äô/'\''/g' -e 's/^ *//g')
 
 # results
 
