@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+# this version returns both connected and disconnected devices.
+
 # I am so sorry for this. please don't hurt me.
 
 # old method, slow, heinous
