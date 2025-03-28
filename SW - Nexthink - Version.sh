@@ -5,12 +5,9 @@
 config="/Library/Application Support/Nexthink/config.json"
 
 if [ -f "$config" ]; then
-
-	VERSION=$(/usr/bin/awk -F\" '/version/ { print $4 }' "$config" )
-
+	version=$(/usr/bin/awk '/version/ { print $NF } ' "$config" | tr -d '",' )
 else
-
-	VERSION="Not Installed"
+	version="Not Installed"
 fi
 
-echo "<result>$VERSION</result>"
+echo "<result>$version</result>"
