@@ -1,10 +1,13 @@
 #!/bin/bash
 
-# 1.0.2 250424 node versions
+# 1.0.3 250424 node versions
 
+# running an EA from Jamf Pro runs as root, so we have to call brew based on the logged in account
+
+result=""
 loggedInUser=$(/usr/bin/stat -f%Su "/dev/console")
 architectureCheck=$(/usr/bin/uname -m)
-currentUserHome=$(dscl . read "/Users/loggedInUser" NFSHomeDirectory | cut -d: -f 2 | sed 's/^ *//'| tr -d '\n')
+currentUserHome=$(dscl . read /Users/"${loggedInUser}" NFSHomeDirectory | cut -d: -f 2 | sed 's/^ *//'| tr -d '\n')
 
 # which node?
 #  brew:     /opt/homebrew/bin/node
@@ -28,27 +31,25 @@ brewPath="$brewPrefix/brew"
 
 if [ -e "$brewPath" ]; then
 	info=$(sudo -u "$loggedInUser" "$brewPath" info node)
-		if [[ $info == "installed" ]]; then
+	if [[ $info == *"Not installed"* ]]; then
+		result=""
+	else	
 		# sudo -u "$loggedInUser" "$brewPath" upgrade -f node
-        info=$(sudo -u "$loggedInUser" "$brewPath" info node)
-    	result="$( echo "$info" | awk '/node:/ { print $2 " " $3 " " $4;exit }')"	
-    	fi
-else
-  result="" # change here if you'd prefer a label ie 'Not Installed'
-
+        # info=$(sudo -u "$loggedInUser" "$brewPath" info node)
+		info=$(sudo -u "$loggedInUser" "$brewPath" info node)
+    	result="$( echo "$info" | awk '/node:/ { print $2 " " $3 " " $4;exit }')"
+    	result="${result//[!0-9.]/}" #bash only, if using zsh change this to sed
+		echo "<result>$result</result>"
+		exit 0
+	fi
 fi
 
 # npm node
 
-if [ -e "${loggedInUser}"/.nvm/ ]; then
-	latest=$(ls -r .nvm/versions/node/ | awk ' { print $1; exit } ' )
-   result=$(sudo -u "$loggedInUser" "$currentUserHome"/.nvm/versions/node/"$latest"/bin/node -v)
+if [ -e "${currentUserHome}"/.nvm/ ]; then
+	latest=$(ls -r "${currentUserHome}"/.nvm/versions/node/ | awk ' { print $1; exit } ' )
+	result=$("$currentUserHome"/.nvm/versions/node/"$latest"/bin/node -v)
+	result="${result//[!0-9.]/}" #bash only, if using zsh change this to sed
+	echo "<result>$result</result>"
+	exit 0
 fi
-
-# if brew node vs npm node, get $result
-
-result="${result//[!0-9.]/}" #bash only, if using zsh change this to sed
-
-echo "<result>$result</result>"
-
-exit 0
