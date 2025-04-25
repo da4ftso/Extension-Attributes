@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 1.0.3 250424 node versions
+# 1.0.4 250424 node versions
 
 # running an EA from Jamf Pro runs as root, so we have to call brew based on the logged in account
 
@@ -38,8 +38,8 @@ if [ -e "$brewPath" ]; then
         # info=$(sudo -u "$loggedInUser" "$brewPath" info node)
 		info=$(sudo -u "$loggedInUser" "$brewPath" info node)
     	result="$( echo "$info" | awk '/node:/ { print $2 " " $3 " " $4;exit }')"
-    	result="${result//[!0-9.]/}" #bash only, if using zsh change this to sed
-		echo "<result>$result</result>"
+    	result="${result//[!0-9.]/}" # bash only, if using zsh change this to sed
+		echo "<result>brew: $result</result>"
 		exit 0
 	fi
 fi
@@ -49,7 +49,7 @@ fi
 if [ -e "${currentUserHome}"/.nvm/ ]; then
 	latest=$(ls -r "${currentUserHome}"/.nvm/versions/node/ | awk ' { print $1; exit } ' )
 	result=$("$currentUserHome"/.nvm/versions/node/"$latest"/bin/node -v)
-	result="${result//[!0-9.]/}" #bash only, if using zsh change this to sed
-	echo "<result>$result</result>"
+	result="${result//[!0-9.]/}" # bash only, if using zsh change this to sed
+	echo "<result>npm: $result</result>"
 	exit 0
 fi
