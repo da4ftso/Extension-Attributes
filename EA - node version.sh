@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 1.0.5 250424 node versions
+# 1.0.6 250428 node versions
 
 # running an EA from Jamf Pro runs as root, so we have to call brew based on the logged in account
 
@@ -34,7 +34,7 @@ if [ -e "$brewPath" ]; then
 		# sudo -u "$loggedInUser" "$brewPath" upgrade -f node
         # info=$(sudo -u "$loggedInUser" "$brewPath" info node)
 		info=$(sudo -u "$loggedInUser" "$brewPath" info node)
-    	result="$( echo "$info" | awk '/node:/ { print $2 " " $3 " " $4;exit }')"
+    	result="$( echo "$info" | awk '/node:/ { print $2 " " $3 " " $4;exit }' | tr -d '\r')"
     	result="${result//[!0-9.]/}" # bash only, if using zsh change this to sed
 		echo "<result>brew: $result</result>"
 		exit 0
@@ -44,7 +44,7 @@ fi
 # npm node
 if [ -e "${currentUserHome}"/.nvm/ ]; then
 	latest=$(ls -r "${currentUserHome}"/.nvm/versions/node/ | awk ' { print $1; exit } ' )
-	result=$("$currentUserHome"/.nvm/versions/node/"$latest"/bin/node -v)
+	result=$("$currentUserHome"/.nvm/versions/node/"$latest"/bin/node -v | tr -d '\r')
 	result="${result//[!0-9.]/}" # bash only, if using zsh change this to sed
 	echo "<result>npm: $result</result>"
 	exit 0
@@ -52,8 +52,7 @@ fi
 
 # pkg node
 if [ -e /usr/local/bin/node ]; then 
-	result=$(/usr/local/bin/node -v)
+	result=$(/usr/local/bin/node -v | tr -d '\r')
  	result="${result//[!0-9.]/}"
   	echo "<result>pkg: $result</result>"
 fi   
-<result>pkg: 22.15.0</result>
