@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Use as Data Type 'Integer'
+
 # report "1 day" if uptime is less than 1 day
 
 uptimeRes=$(uptime)
