@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Use as Data Type 'Date' - useful for comparing devices that needed to restart before or after some other event
+
+echo "<result>$(date -jf "%s" "$(sysctl kern.boottime | awk -F'[= |,]' '{print $6}')" +"%Y-%m-%d %T")</result>"
