@@ -18,7 +18,7 @@ if [[ -z "$4" ]]; then
 fi 
 
 if /bin/launchctl list | grep -q "$plistPath" ; then # https://www.shellcheck.net/wiki/SC2143
-	echo "$plistPath job is loaded."
+	echo "<result>$plistPath job is loaded.</result>"
 else
-	echo "$plistPath job is not loaded load."
+	echo "<result>$plistPath job is not loaded.</result>"
 fi
