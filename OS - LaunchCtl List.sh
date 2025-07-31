@@ -2,12 +2,10 @@
 
 # obviously this should've been named 'Will It Blend' but reasons
 
-# from userspace: /bin/launchctl list | /usr/bin/awk '{print substr($0, index($0, $3))}' | /usr/bin/sed '1d' | grep -v apple
+# from userspace and root: /bin/launchctl list | /usr/bin/awk '{print substr($0, index($0, $3))}' | /usr/bin/sed '1d' | grep -v apple | sort
 #
 # use this to determine everything required for day to day
 # then use this EA to check whether it's loaded
-#
-# WIP: separate version of this that attempts to reload (force) the job
 
 # variables
 
