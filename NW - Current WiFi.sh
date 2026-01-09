@@ -2,26 +2,26 @@
 
 # 15.7 apparently still returns <redacted>
 # 26.0 currently returns the SSID name, something to watch for RC & beyond
+# 26.0.1 and later started returning <redacted>
+# this version correctly returns on 26.2 and 26.3b1
+# credit to ZP and Dan K Snelson for the ipconfig setverbose
 
-osProductVersion=$( /usr/bin/sw_vers -productVersion )
+# file Feedback with Apple as to why this needs to be set via MDM!
 
+iface=$(scutil --nwi | grep -E -om1 'en\d') # egrep is deprecated
 
-case "${osProductVersion}" in
+/usr/sbin/ipconfig setverbose 1
 
-    12* | 13* | 14* )
-		wifi=$(networksetup -listallhardwareports | awk '/Hardware Port: Wi-Fi/,/Ethernet/' | awk 'NR==2' | cut -d " " -f 2)
-		ssid=$(networksetup -getairportnetwork "$wifi" | awk -F': ' '{ print $NF;exit }')
-		echo "<result>${ssid}</result>"
-        ;;
+ssid=$(ipconfig getsummary $iface | awk '/ SSID : / { print $NF } ')
 
-    15* )
-    	ssid=$(/usr/libexec/PlistBuddy -c "Print :0:_items:spairport_airport_interfaces:spairport_airport_interfaces:spairport_current_network_information:spairport_current_network_information:_name" /dev/stdin <<< $(system_profiler SPAirPortDataType -xml) 2> /dev/null )
+if [ -z "$ssid" ]; then
+
+        echo "No Wi-Fi detected"
+
+else
+
         echo "<result>${ssid}</result>"
-        ;;
-	26* )
-		ssid=$(/usr/bin/wdutil info | grep -w SSID | sed 's/.*\: //')
-		echo "<result>${ssid}</result>"
-		;;        
-esac
 
-exit 0
+fi
+
+/usr/sbin/ipconfig setverbose 0
