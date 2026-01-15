@@ -9,7 +9,7 @@
 
 # variables
 
-currentUser=$(stat -f%Su /dev/console)
+currentUser=$(/usr/bin/stat -f%Su "/dev/console")
 uid=$(id -u $currentUser)
 plistPath="$4"
 
