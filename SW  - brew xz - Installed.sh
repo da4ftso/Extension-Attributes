@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 # have to get the correct path
 
