@@ -2,6 +2,8 @@
 
 # checks for .plist, returns New, Legacy or n/a
 
+# probably overkill as an EA but maybe useful when deploying iManage..?
+
 # variables
 
 currentUser=$(/usr/bin/stat -f%Su "/dev/console")
