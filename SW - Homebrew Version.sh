@@ -11,18 +11,24 @@
 #
 # sed to remove the crud.
 
-# runAsUser since otherwise Jamf will report this via the root user and give an inaccurate result
-loggedInUser=$(/usr/bin/stat -f%Su "/dev/console")
+# 1.8 - use currentUser or fall back to lastUser
+currentUser=$(/usr/bin/stat -f%Su "/dev/console")
+lastUser=$(defaults read /Library/Preferences/com.apple.loginwindow lastUserName)
+
+# if current = "" or = "root" etc
+if [[ "$currentUser" = "" || "$currentUser" = "root" ]]; then
+	asUser=$lastUser
+else
+	asUser=$currentUser
+fi
 
 # -m for (machine) hardware type; could use -p instead
-architectureCheck=$(/usr/bin/uname -m)
+arch=$(/usr/bin/uname -m)
 
-if [ "$architectureCheck" = "arm64" ]; then
+if [ "$arch" = "arm64" ]; then
   brewPrefix="/opt/homebrew/bin"
-
 else
   brewPrefix="/usr/local/bin"
-
 fi
 
 brewPath="$brewPrefix/brew"
@@ -30,11 +36,9 @@ brewPath="$brewPrefix/brew"
 # Check for presence of target binary and get version.
 
 if [ -e "$brewPath" ]; then
-  result=$(sudo -u "$loggedInUser" "$brewPath" --version | awk ' { print $2 }' | sed 's/[ -].*//' ) # catch the -dirty and (git etc
-
+  result=$(sudo -u "$asUser" "$brewPath" --version | awk ' { print $2 }' | sed 's/[ -].*//' ) # catch the -dirty and (git etc
 else
   result="" # change here if you'd prefer a label ie 'Not Installed'
-
 fi
 
 echo "<result>$result</result>"
