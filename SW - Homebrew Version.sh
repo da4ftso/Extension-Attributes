@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# with no awk, we'd get some crud:
+# with no awk, we'd get lots of crud:
 #  Homebrew 4.1.15 Homebrew/homebrew-core (no Git repository) Homebrew/homebrew-cask (git revision 9d67b1d07b; last commit 2023-10-10)
 #
 # with awk $2 we (typically) get a usable value:
@@ -11,7 +11,10 @@
 #
 # sed to remove the crud.
 
-# 1.8.1 - use currentUser or fall back to lastUser
+# 1.8.2 - back to /bin/bash shebang since EAs can't use /usr/bin/bash
+#  (EA will run properly locally but will fail recon)
+
+# use currentUser or fall back to lastUser
 
 currentUser=$(/usr/bin/stat -f%Su "/dev/console")
 # lastUser=$(defaults read /Library/Preferences/com.apple.loginwindow lastUserName)
