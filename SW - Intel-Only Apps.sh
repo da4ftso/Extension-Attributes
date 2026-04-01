@@ -1,5 +1,8 @@
 #!/bin/bash
 
+
+# add logic for anything with /Wrapper
+
 # only run on Apple Silicon
 arch=$(/usr/bin/arch)
 if [ "$arch" != "arm64" ]; then
