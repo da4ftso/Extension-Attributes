@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# 1.0.5 250424 node versions
+# node versions
+# 1.1 260424
 
 # running an EA from Jamf Pro runs as root, so we have to call brew based on the logged in account
 
