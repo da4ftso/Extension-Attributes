@@ -26,32 +26,34 @@ fi
 brewPath="$brewPrefix/brew"
 
 # Check for presence of target binary and get version.
+declare -a nodeVersions=()
+
+# Brew node
 if [ -e "$brewPath" ]; then
-	info=$(sudo -u "$loggedInUser" "$brewPath" info node)
-	if [[ $info == *"Not installed"* ]]; then
-		result=""
-	else	
-		# sudo -u "$loggedInUser" "$brewPath" upgrade -f node
-		info=$(sudo -u "$loggedInUser" "$brewPath" info node)
-    	result="$( echo "$info" | awk '/node:/ { print $2 " " $3 " " $4;exit }' | tr -d '\r')"
-    	result="${result//[!0-9.]/}" # bash only, if using zsh change this to sed
-		echo "<result>brew: $result</result>"
-		exit 0
-	fi
+    info=$(sudo -u "$loggedInUser" "$brewPath" info node 2>/dev/null)
+    if [[ $info != *"Not installed"* ]]; then
+        result=$( echo "$info" | awk '/node:/ { print $2 " " $3 " " $4;exit }' | tr -d '\r')
+        result="${result//[!0-9.]/}"
+        [ -n "$result" ] && nodeVersions+=("brew: $result")
+    fi
 fi
 
-# npm node
-if [ -e "${currentUserHome}"/.nvm/ ]; then
-	latest=$(ls -r "${currentUserHome}"/.nvm/versions/node/ | awk ' { print $1; exit } ' )
-	result=$("$currentUserHome"/.nvm/versions/node/"$latest"/bin/node -v | tr -d '\r')
-	result="${result//[!0-9.]/}" # bash only, if using zsh change this to sed
-	echo "<result>npm: $result</result>"
-	exit 0
+# NVM node
+nvm_node_path="${currentUserHome}/.nvm/versions/node/$(ls -r "${currentUserHome}"/.nvm/versions/node/ 2>/dev/null | awk 'NR==1')/bin/node"
+if [ -x "$nvm_node_path" ]; then
+    result=$("$nvm_node_path" -v 2>/dev/null | tr -d '\r' | sed 's/[^0-9.]//g')
+    [ -n "$result" ] && nodeVersions+=("nvm: $result")
 fi
 
-# pkg node
-if [ -e /usr/local/bin/node ]; then 
-	result=$(/usr/local/bin/node -v | tr -d '\r')
- 	result="${result//[!0-9.]/}"
-  	echo "<result>pkg: $result</result>"
-fi   
+# PKG node
+if [ -x /usr/local/bin/node ]; then
+    result=$(/usr/local/bin/node -v 2>/dev/null | tr -d '\r' | sed 's/[^0-9.]//g')
+    [ -n "$result" ] && nodeVersions+=("pkg: $result")
+fi
+
+# Output all detected versions
+if [ ${#nodeVersions[@]} -eq 0 ]; then
+    echo "<result>Not installed</result>"
+else
+    echo "<result>$(IFS='; '; echo "${nodeVersions[*]}")</result>"
+fi
