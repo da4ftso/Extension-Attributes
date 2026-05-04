@@ -42,7 +42,7 @@ brewPath="$brewPrefix/brew"
 # Check for presence of target binary and get version.
 
 if [ -e "$brewPath" ]; then
-  result=$(sudo -u "$asUser" "$brewPath" --version | sed -En 's/Homebrew[[:space:]]+([0-9.]+).*/\1/p')
+  result=$(sudo -u "$asUser" "$brewPath" -v | sed -En 's/Homebrew[[:space:]]+([0-9.]+).*/\1/p')
 else
   result="" # change here if you'd prefer a label ie 'Not Installed'
 
