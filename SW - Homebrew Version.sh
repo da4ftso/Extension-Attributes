@@ -11,15 +11,13 @@
 #
 # sed to remove the crud.
 
-# 1.8.2 - back to /bin/bash shebang since EAs can't use /usr/bin/bash
-#  (EA will run properly locally but will fail recon)
-
-# use currentUser or fall back to lastUser
+# 1.9 - consolidated awk+sed -> sed
 
 currentUser=$(/usr/bin/stat -f%Su "/dev/console")
 # lastUser=$(defaults read /Library/Preferences/com.apple.loginwindow lastUserName)
 
 # if current = "" or = "root" etc
+# then change to asUser
 
 if [[ "$currentUser" = "" || "$currentUser" = "root" ]]; then
 	asUser=$(defaults read /Library/Preferences/com.apple.loginwindow lastUserName)
@@ -41,8 +39,9 @@ brewPath="$brewPrefix/brew"
 
 # Check for presence of target binary and get version.
 
-if [ -e "$brewPath" ]; then
-  result=$(sudo -u "$asUser" "$brewPath" -v | sed -En 's/Homebrew[[:space:]]+([0-9.]+).*/\1/p')
+if [[ -e "$brewPath" ]]; then
+  result=$(sudo -u "$asUser" "$brewPath" -v | sed -En 's/Homebrew[[:space:]]+([0-9.]+).*/\1/p' )
+
 else
   result="" # change here if you'd prefer a label ie 'Not Installed'
 
