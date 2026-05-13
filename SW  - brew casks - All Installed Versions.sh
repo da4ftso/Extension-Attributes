@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Extract name and version for every installed brew cask
-# Supports both Intel and Apple Silicon Macs
+# name and version for every installed brew cask
+# spotify: 1.2.26
 
-# Determine the correct brew prefix based on architecture
+# brewPath
 arch=$(/usr/bin/uname -m)
 
 if [ "$arch" = "arm64" ]; then
@@ -20,27 +20,26 @@ if [ ! -x "$brewPath" ]; then
   exit 0
 fi
 
-# Get list of installed casks
+# list of installed casks
 casks=$($brewPath list --cask 2>/dev/null)
 
-# Check if any casks are installed
 if [ -z "$casks" ]; then
   echo "<result>No Casks Installed</result>"
   exit 0
 fi
 
-# Build output string with all casks and versions
+# build output string with all casks and versions
 output=""
 while IFS= read -r cask; do
-  # Get version info for each cask
+  # version info for each cask
   version=$($brewPath info --cask "$cask" 2>/dev/null | awk '/:/ { print $NF; exit }')
   
-  # Handle empty version gracefully
+  # empty version?
   if [ -z "$version" ]; then
     version="Unknown"
   fi
   
-  # Build the output
+  # output
   if [ -z "$output" ]; then
     output="$cask: $version"
   else
@@ -48,5 +47,5 @@ while IFS= read -r cask; do
   fi
 done <<< "$casks"
 
-# Return the result
+# results
 echo "<result>$output</result>"
