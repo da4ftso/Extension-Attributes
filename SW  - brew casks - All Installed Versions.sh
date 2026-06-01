@@ -1,9 +1,22 @@
 #!/bin/bash
 
+# 1.1 260601 PWC
+
 # name and version for every installed brew cask
 # spotify: 1.2.26
 
-# brewPath
+# variables
+currentUser=$(/usr/bin/stat -f%Su "/dev/console")
+
+if [ -z "$currentUser" ] || [ "$currentUser" == "root" ]; then
+  currentUser=$(defaults read /Library/Preferences/com.apple.loginwindow.plist lastUserName 2>/dev/null)
+fi
+
+if [ -z "$currentUser" ]; then
+  # echo "Unable to get user"
+  exit 0
+fi
+
 arch=$(/usr/bin/uname -m)
 
 if [ "$arch" = "arm64" ]; then
@@ -21,7 +34,7 @@ if [ ! -x "$brewPath" ]; then
 fi
 
 # list of installed casks
-casks=$($brewPath list --cask 2>/dev/null)
+casks=$(sudo -u "$currentUser" $brewPath list --cask 2>/dev/null)
 
 if [ -z "$casks" ]; then
   echo "<result>No Casks Installed</result>"
@@ -32,7 +45,7 @@ fi
 output=""
 while IFS= read -r cask; do
   # version info for each cask
-  version=$($brewPath info --cask "$cask" 2>/dev/null | awk '/:/ { print $NF; exit }')
+  version=$(sudo -u "$currentUser" $brewPath info --cask "$cask" 2>/dev/null | awk -F'[()]' 'NF>1 {print $2 $3; exit}' )
   
   # empty version?
   if [ -z "$version" ]; then
