@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# 1.1 260601 PWC
-
 # name and version for every installed brew cask
 # spotify: 1.2.26
 
