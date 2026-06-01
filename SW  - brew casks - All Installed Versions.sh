@@ -11,7 +11,7 @@ if [ -z "$currentUser" ] || [ "$currentUser" == "root" ]; then
 fi
 
 if [ -z "$currentUser" ]; then
-  # echo "Unable to get user"
+  echo "Unable to get user"
   exit 0
 fi
 
@@ -52,9 +52,11 @@ while IFS= read -r cask; do
   
   # output
   if [ -z "$output" ]; then
-    output="$cask: $version"
+#    output="$cask: $version"
+    output="$version"
   else
-    output="$output, $cask: $version"
+#    output="$output, $cask: $version"
+    output="$output, $version"
   fi
 done <<< "$casks"
 
