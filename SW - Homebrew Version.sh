@@ -12,6 +12,7 @@
 # sed to remove the crud.
 
 # 1.9 - consolidated awk+sed -> sed
+# 2.0 - added Workbrew detection
 
 currentUser=$(/usr/bin/stat -f%Su "/dev/console")
 # lastUser=$(defaults read /Library/Preferences/com.apple.loginwindow lastUserName)
@@ -27,15 +28,19 @@ fi
 	
 arch=$(/usr/bin/uname -m)
 
+# Check for Workbrew first (ARM64 only), then standard Homebrew paths
+brewPath=""
+
 if [ "$arch" = "arm64" ]; then
-  brewPrefix="/opt/homebrew/bin"
-
+  workbrewPath="/opt/workbrew/bin/brew"
+  if [[ -e "$workbrewPath" ]]; then
+    brewPath="$workbrewPath"
+  else
+    brewPath="/opt/homebrew/bin/brew"
+  fi
 else
-  brewPrefix="/usr/local/bin"
-
+  brewPath="/usr/local/bin/brew"
 fi
-
-brewPath="$brewPrefix/brew"
 
 # Check for presence of target binary and get version.
 
