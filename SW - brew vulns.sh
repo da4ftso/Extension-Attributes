@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 1.1 230626 PWC
+# 1.1.1 230626 PWC
 # brew vulns EA-friendly output: use user's shell to find/run brew, strip ANSI colors,
 # and use case-insensitive awk matching.
 
@@ -46,11 +46,11 @@ vuln=$(sudo -u "$currentUser" bash -lc "'${brewPath}' vulns 2>/dev/null || true"
       IGNORECASE = 1
       critical = 0; high = 0; medium = 0; low = 0; unknown = 0
     }
-    /critical/ { critical++ }
-    /high/     { high++ }
-    /medium/   { medium++ }
-    /low/      { low++ }
-    /unknown/  { unknown++ }
+    /CRITICAL/ { critical++ }
+    /HIGH/     { high++ }
+    /MEDIUM/   { medium++ }
+    /LOW/      { low++ }
+    /UNKNOWN/  { unknown++ }
     END {
       printf "Critical: %d\nHigh: %d\nMedium: %d\nLow: %d\nUnknown: %d\n",
              critical, high, medium, low, unknown
