@@ -1,15 +1,8 @@
 #!/bin/bash
 
-# 1.0 260623 PWC
-# brew vulns clean output, maybe need printf?
-
-# sample output:
-# % ./brew_vulns_ea.sh
-# <result>Critical: 0
-# High: 4
-# Medium: 2
-# Low: 0
-# Unknown: 1</result>
+# 1.1 230626 PWC
+# brew vulns EA-friendly output: use user's shell to find/run brew, strip ANSI colors,
+# and use case-insensitive awk matching.
 
 # variables
 currentUser=$(/usr/bin/stat -f%Su "/dev/console")
@@ -23,15 +16,21 @@ if [ -z "$currentUser" ]; then
   exit 0
 fi
 
-arch=$(/usr/bin/uname -m)
+# Try to find brew in the user's environment (this helps when Jamf runs as root but brew is in user's PATH)
+userBrewPath=$(sudo -u "$currentUser" bash -lc 'command -v brew 2>/dev/null' || true)
 
-if [ "$arch" = "arm64" ]; then
-  brewPrefix="/opt/homebrew/bin"
+# Fallback if not found via user's shell
+if [ -n "$userBrewPath" ]; then
+  brewPath="$userBrewPath"
 else
-  brewPrefix="/usr/local/bin"
+  arch=$(/usr/bin/uname -m)
+  if [ "$arch" = "arm64" ]; then
+    brewPrefix="/opt/homebrew/bin"
+  else
+    brewPrefix="/usr/local/bin"
+  fi
+  brewPath="$brewPrefix/brew"
 fi
-
-brewPath="$brewPrefix/brew"
 
 # brew installed?
 if [ ! -x "$brewPath" ]; then
@@ -39,21 +38,23 @@ if [ ! -x "$brewPath" ]; then
   exit 0
 fi
 
-# count of vulnerabilities without CVE
-vuln=$(sudo -u "$currentUser" $brewPath vulns | awk '
-     BEGIN {     
-      critical=0; high=0; medium=0; low=0; unknown=0
-    }                
-
-    /\(CRITICAL\)/ { critical++ }
-    /\(HIGH\)/     { high++ }
-    /\(MEDIUM\)/   { medium++ }
-    /\(LOW\)/      { low++ }
-    /\(UNKNOWN\)/  { unknown++ }
-
+# Run brew vulns as the user (using their shell), strip ANSI color codes, then count severities case-insensitively.
+vuln=$(sudo -u "$currentUser" bash -lc "'${brewPath}' vulns 2>/dev/null || true" \
+  | sed -E $'s/\x1B\\[[0-9;]*[mK]//g' \
+  | awk '
+    BEGIN {
+      IGNORECASE = 1
+      critical = 0; high = 0; medium = 0; low = 0; unknown = 0
+    }
+    /critical/ { critical++ }
+    /high/     { high++ }
+    /medium/   { medium++ }
+    /low/      { low++ }
+    /unknown/  { unknown++ }
     END {
       printf "Critical: %d\nHigh: %d\nMedium: %d\nLow: %d\nUnknown: %d\n",
              critical, high, medium, low, unknown
-    } ')
+    }')
 
+# Output for Jamf EA
 echo "<result>$vuln</result>"
