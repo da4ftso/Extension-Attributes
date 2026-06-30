@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # significantly faster
-# but how does SP register every app? does it require being launched at least once?
+# addl sed to strip out /Applications - less accurate results in ~
 
 # will return results including full path but skip contents of Library folders
 # rm the grep -v from line 17 to get those as well (many mor e results possible)
@@ -18,7 +18,8 @@ intel_apps=$(system_profiler SPApplicationsDataType | awk '/Kind: Intel/ { found
 
 # Check if the string is empty
 if [ -z "$intel_apps" ]; then
-    echo "<result>None</result>"
+    echo "<result></result>"
 else
+    intel_apps=$(echo "$intel_apps" | sed 's/\/Applications//g')
     echo "<result>$intel_apps</result>"
 fi
