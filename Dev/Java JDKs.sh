@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# 1.0.3 260501
+# 1.1 260806 PWC
 #
-# Prettyprint all Java VMs
+# prettyprint all Java VMs
 #
 # /usr/libexec/java_home --verbose will return something like:
 #
@@ -14,7 +14,7 @@
 # /Library/Java/JavaVirtualMachines/amazon-corretto-11.jdk/Contents/Home
 
 result=$(/usr/libexec/java_home --verbose 2>&1 |
-  awk 'NR>1 { gsub(/[()"]/, ""); print $3, $1, $2 }')
+  awk 'NR>1 { gsub(/[()"]/, ""); print $3, $1, $2, exit }')
 
 if [[ "$result" =~ Please ]] ; then
 	result="Not Found"
