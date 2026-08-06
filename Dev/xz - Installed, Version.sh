@@ -3,6 +3,8 @@
 # checks for brew; if present, checks for xz; if present, returns the version
 # otherwise returns "Not Installed"
 #
+# revisit this when Workbrew is deployed
+#
 # https://access.redhat.com/security/cve/CVE-2024-3094
 #
 # replace multiple tr with shell expansion?
