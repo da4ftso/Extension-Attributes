@@ -11,8 +11,8 @@
 #
 # sed to remove the crud.
 
+# 1.10 - workbrew check, two-line result
 # 1.9 - consolidated awk+sed -> sed
-# 2.0 - added Workbrew detection
 
 currentUser=$(/usr/bin/stat -f%Su "/dev/console")
 # lastUser=$(defaults read /Library/Preferences/com.apple.loginwindow lastUserName)
@@ -28,24 +28,23 @@ fi
 	
 arch=$(/usr/bin/uname -m)
 
-# Check for Workbrew first (ARM64 only), then standard Homebrew paths
-brewPath=""
-
 if [ "$arch" = "arm64" ]; then
-  workbrewPath="/opt/workbrew/bin/brew"
-  if [[ -e "$workbrewPath" ]]; then
-    brewPath="$workbrewPath"
-  else
-    brewPath="/opt/homebrew/bin/brew"
-  fi
+  brewPrefix="/opt/homebrew/bin"
 else
-  brewPath="/usr/local/bin/brew"
+  brewPrefix="/usr/local/bin"
 fi
+
+if [ -d /opt/workbrew ]; then
+  brewPrefix="/opt/workbrew/bin/"
+fi  
+
+brewPath="$brewPrefix/brew"
 
 # Check for presence of target binary and get version.
 
 if [[ -e "$brewPath" ]]; then
-  result=$(sudo -u "$asUser" "$brewPath" -v | sed -En 's/Homebrew[[:space:]]+([0-9.]+).*/\1/p' )
+#  result=$(sudo -u "$asUser" "$brewPath" -v | sed -En 's/Homebrew[[:space:]]+([0-9.]+).*/\1/p' )
+  result=$(sudo -u "$asUser" "$brewPath" -v )
 
 else
   result="" # change here if you'd prefer a label ie 'Not Installed'
