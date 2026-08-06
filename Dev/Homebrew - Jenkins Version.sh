@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# no need for workbrew detection since WB would handle this
+
 # brew info jenkins, return version if installed or blank if not
 # https://nvd.nist.gov/vuln/detail/CVE-2024-23897
 
