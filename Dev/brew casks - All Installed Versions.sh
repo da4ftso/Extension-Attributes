@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # name and version for every installed brew cask
-# spotify: 1.2.26
+# Ex: spotify: 1.2.26
+
+# no need for Workbrew detection since WB would handle this
 
 # variables
 currentUser=$(/usr/bin/stat -f%Su "/dev/console")
