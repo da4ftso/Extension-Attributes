@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# now returns two line result if Workbrew is installed:
+#   Workbrew 1.10.7
+#   Homebrew 6.0.17
+
 # with no awk, we'd get lots of crud:
 #  Homebrew 4.1.15 Homebrew/homebrew-core (no Git repository) Homebrew/homebrew-cask (git revision 9d67b1d07b; last commit 2023-10-10)
 #
