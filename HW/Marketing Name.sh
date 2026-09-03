@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# if your Jamf Pro instance is reasonably up to date you probably don't need this anymore
+
 # based upon https://community.jamf.com/t5/jamf-pro/collect-year-from-mac-marketing-model-name/m-p/250495/highlight/true#M233520
 # redirect from stdin was causing errors, but this used to work? write out to .plist instead
 # tested via ARD on 12.x - 14.0 arm64 & x86
