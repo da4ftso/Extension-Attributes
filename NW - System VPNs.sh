@@ -6,4 +6,4 @@
 
 # typically you can ignore 'ppp' entries - more interested in Nord, Proton, L2TP, etc
 
-echo "<result>$(/usr/bin/scutil --nc list | sed '1d')</result>"
+echo "<result>$(/usr/sbin/scutil --nc list | sed '1d')</result>"
