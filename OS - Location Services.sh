@@ -1,18 +1,38 @@
-#!/usr/bin/env zsh
+#!/bin/bash
 
-# not supported by macOS 27
+uuid=$(
+    ioreg -rd1 -c IOPlatformExpertDevice |
+    awk -F'"' '/IOPlatformUUID/{print $4}'
+)
 
-LoggedinUser=$(/usr/bin/stat -f%Su /dev/console)
-userGUID=$(dscl . -read "/Users/${LoggedinUser}" GeneratedUID | awk '{ print $2 }')
-
-authStatus=$(defaults read /var/db/locationd/clients.plist $userGUID:icom.absolute.ctesservice.ase: | grep Authorized | awk -F ' = ' '{ print $2}')
-
-if [[ ${authStatus} == "1;" ]]; then
-	Result="Enabled by user"
-elif [[ ${authStatus} == "0;" ]]; then
-	Result="Disabled by user"
-else
-	Result="Not set"
+if [[ -z "$uuid" ]]; then
+    echo "<result>Unavailable</result>"
+    exit 0
 fi
 
-echo "<result>$Result</result>"
+plist="/var/db/locationd/Library/Preferences/ByHost/com.apple.locationd.${uuid}.plist"
+
+if [[ ! -f "$plist" ]]; then
+    echo "<result>Unavailable</result>"
+    exit 0
+fi
+
+# plutil -extract works with XML and binary property lists.
+# status=$(plutil -extract LocationServicesEnabled raw -o - "$plist" 2>/dev/null)
+
+# awk works reliably on 27
+status=$(plutil -p /var/db/locationd/Library/Preferences/ByHost/com.apple.locationd.${uuid}.plist awk '/LocationServicesEnabled/ { print $NF }')
+
+case "$status" in
+    1|true|TRUE|yes)
+        result="Enabled"
+        ;;
+    0|false|FALSE|no)
+        result="Disabled"
+        ;;
+    *)
+        result="Unavailable"
+        ;;
+esac
+
+echo "<result>${result}</result>"
