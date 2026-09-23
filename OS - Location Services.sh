@@ -1,27 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 
-uuid=$(system_profiler SPHardwareDataType | grep "Hardware UUID" | awk '{print $3}')
-domain="/var/db/locationd/Library/Preferences/ByHost/com.apple.locationd.${uuid}"
-plist="${domain}.plist"
+LoggedinUser=$(/usr/bin/stat -f%Su /dev/console)
+userGUID=$(dscl . -read "/Users/${LoggedinUser}" GeneratedUID | awk '{ print $2 }')
 
-sw_vers=$(sw_vers -productVersion | awk -F. '{print $1}') # 14 for Sonoma, eg
+authStatus=$(defaults read /var/db/locationd/clients.plist $userGUID:icom.absolute.ctesservice.ase: | grep Authorized | awk -F ' = ' '{ print $2}')
 
-if [[ -f "${plist}" ]]
-then
-	if [ "$sw_vers" -gt "11" ]
-	then
-	        status=$(plutil -p "${plist}" | awk '/LocationServicesEnabled/ {print $NF}')
-	else
-                status=$(defaults read "${plist}" LocationServicesEnabled)
-        fi
-    if [[ "${status}" == "1" ]]
-    then
-        result="Enabled"
-    else
-        result="Disabled"
-    fi
+if [[ ${authStatus} == "1;" ]]; then
+	Result="Enabled by user"
+elif [[ ${authStatus} == "0;" ]]; then
+	Result="Disabled by user"
 else
-    result="Unavailable"
+	Result="Not set"
 fi
 
-echo "<result>${result}</result>"
+echo "<result>$Result</result>"
