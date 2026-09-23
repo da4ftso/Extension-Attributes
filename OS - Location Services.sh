@@ -21,7 +21,7 @@ fi
 # status=$(plutil -extract LocationServicesEnabled raw -o - "$plist" 2>/dev/null)
 
 # awk works reliably on 27
-status=$(plutil -p /var/db/locationd/Library/Preferences/ByHost/com.apple.locationd.${uuid}.plist awk '/LocationServicesEnabled/ { print $NF }')
+status=$(plutil -p /var/db/locationd/Library/Preferences/ByHost/com.apple.locationd.${uuid}.plist | awk '/LocationServicesEnabled/ { print $NF }')
 
 case "$status" in
     1|true|TRUE|yes)
