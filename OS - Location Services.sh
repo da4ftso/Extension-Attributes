@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+# not supported by macOS 27
+
 LoggedinUser=$(/usr/bin/stat -f%Su /dev/console)
 userGUID=$(dscl . -read "/Users/${LoggedinUser}" GeneratedUID | awk '{ print $2 }')
 
