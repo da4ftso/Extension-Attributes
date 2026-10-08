@@ -6,20 +6,16 @@
 # this version correctly returns on 26.2+ incl 27.0
 # credit to ZP and Dan K Snelson for the ipconfig setverbose
 
-iface=$(scutil --nwi | grep -E -om1 'en\d') # egrep is deprecated
+iface=$(scutil --nwi | grep -E -om1 'en\d')
 
-# /usr/sbin/ipconfig setverbose 1 - doesn't work in GG
+/usr/sbin/ipconfig setverbose 1
 
-ssid=$(ipconfig getsummary $iface | awk '/ SSID : / { print $NF } ')
+ssid=$(ipconfig getsummary "$iface" | awk -F' : ' '/^[[:space:]]*SSID[[:space:]]*:/{print $2}')
 
 if [ -z "$ssid" ]; then
-
         echo "No Wi-Fi detected"
-
 else
-
         echo "<result>${ssid}</result>"
-
 fi
 
 /usr/sbin/ipconfig setverbose 0
