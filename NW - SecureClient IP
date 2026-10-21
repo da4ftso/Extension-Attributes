@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# add logic check for presence of vpn binary then connected
+
+result=$(/opt/cisco/secureclient/bin/vpn stats | awk '/Address \(IPv4\): / { print $NF }')
+
+echo "<result>$result</result>"
