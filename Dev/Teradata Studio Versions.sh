@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# 1.1 261116 PWC
+
 app1="/Applications/TeradataStudio.app"
 app2="/Applications/TeradataStudioExpress.app"
 
@@ -8,7 +10,6 @@ getBundleVersion() {
     local plist="${app}/Contents/Info.plist"
 
     if [[ ! -f "$plist" ]]; then
-        # echo "Not Installed"
         return
     fi
 
@@ -28,7 +29,20 @@ version2=$(getBundleVersion "$app2")
 name1=$(/usr/bin/basename "$app1" .app)
 name2=$(/usr/bin/basename "$app2" .app)
 
-# echo "<result>${name1}: ${version1}; ${name2}: ${version2}</result>"
-printf "<result>${name1}: ${version1}\n ${name2}: ${version2}</result>"
+result=""
+
+if [[ -n "$version1" ]]; then
+    result="${name1}: ${version1}"
+fi
+
+if [[ -n "$version2" ]]; then
+    if [[ -n "$result" ]]; then
+        result="${result}; ${name2}: ${version2}"
+    else
+        result="${name2}: ${version2}"
+    fi
+fi
+
+printf '<result>%s</result>\n' "$result"
 
 exit 0
